@@ -5,7 +5,7 @@ class TasksController < ApplicationController
   # para essa pagina
   def index
     # O @varivail quer dizer que ela estara disponivel nas views.
-    @tasks = Task.order(:due_date)
+    @tasks = Task.only_parents.order(:due_date)
   end
 
   # new cria um novo registro que depois ira persistir no db com o create.
@@ -50,6 +50,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:description, :due_date, :done)
+    params.require(:task).permit(:description, :due_date, :done, :parent_id)
   end
 end
