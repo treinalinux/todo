@@ -1,24 +1,52 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+## Authenticate with http
 
-* Ruby version
+### credentials encrypted
 
-* System dependencies
+```bash
+EDITOR="vim" bin/rails credentials:edit
+```
 
-* Configuration
+```ruby
+...
+authentication:
+  username: 'alan'
+  password: 'senhaSecreta'
 
-* Database creation
+```
 
-* Database initialization
+Testing on Rails c
 
-* How to run the test suite
+```ruby
 
-* Services (job queues, cache servers, search engines, etc.)
+rails c
 
-* Deployment instructions
+irb(main):001:0> Rails.application.credentials.authentication
+=> {:username=>"alan", :password=>"senhaSecreta"}
+irb(main):002:0> Rails.application.credentials.authentication[:username]
+=> "alan"
 
-* ...
+```
+
+
+```ruby
+
+❯ vim app/controllers/application_controller.rb
+
+# frozen_string_literal: true
+
+# class ApplicationController
+class ApplicationController < ActionController::Base
+  before_action :authenticate
+
+  def authenticate
+    authenticate_or_request_with_http_basic do |username, password|
+      username == Rails.application.credentials.authentication[:username] &&
+        password == Rails.application.credentials.authentication[:password]
+    end
+  end
+end
+
+```
