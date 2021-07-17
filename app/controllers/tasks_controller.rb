@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  include Exportable
   before_action :set_task, only: %i[show edit update destroy]
 
   # index retorna uma colecao dos registros importantes
